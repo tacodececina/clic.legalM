@@ -1,0 +1,6 @@
+{
+  "name": "Clic Legal",
+  "description": "Asesoría legal, contable y psicológica de alto nivel con un enfoque moderno, humano y de alta precisión.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
