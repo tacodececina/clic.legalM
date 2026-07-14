@@ -31,7 +31,7 @@ export default function PrensaSection() {
         
         {/* Section Title */}
         <div className="mb-16">
-          <div className="inline-flex items-center gap-2 mb-3 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-2xl-sm text-[10px] font-bold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 mb-3 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-lg text-[10px] font-bold tracking-widest uppercase">
             <Newspaper size={12} />
             Opinión y Prensa
           </div>
@@ -49,12 +49,12 @@ export default function PrensaSection() {
             <motion.div
               key={article.id}
               whileHover={{ y: -6, borderColor: 'rgba(148,124,99,0.4)' }}
-              className="bg-dark-card border border-dark-border/40 rounded-2xl-lg p-6 flex flex-col justify-between"
+              className="bg-dark-card border border-dark-border/40 rounded-3xl p-6 flex flex-col justify-between"
             >
               <div className="space-y-4">
                 {/* Meta details bar */}
                 <div className="flex items-center justify-between text-[11px] font-sans font-medium">
-                  <span className="px-2.5 py-0.5 bg-gold-dark/20 text-gold-light rounded-2xl-sm font-bold uppercase tracking-wider text-[9px] border border-gold-brand/10">
+                  <span className="px-2.5 py-0.5 bg-gold-dark/20 text-gold-light rounded-lg font-bold uppercase tracking-wider text-[9px] border border-gold-brand/10">
                     {article.category}
                   </span>
                   <span className="text-dark-text-muted">{article.date}</span>
@@ -77,7 +77,7 @@ export default function PrensaSection() {
               {/* Author & CTA Row */}
               <div className="mt-6 pt-4 border-t border-dark-border/20 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-2xl-full bg-gold-dark/30 border border-gold-brand/30 flex items-center justify-center text-gold-light">
+                  <div className="w-7 h-7 rounded-full bg-gold-dark/30 border border-gold-brand/30 flex items-center justify-center text-gold-light">
                     <User size={12} />
                   </div>
                   <div>
@@ -88,7 +88,7 @@ export default function PrensaSection() {
 
                 <button
                   onClick={() => setSelectedArticle(article)}
-                  className="p-1.5 rounded-2xl-full border border-dark-border hover:border-gold-brand hover:text-gold-light text-dark-text-muted transition-all cursor-pointer"
+                  className="p-1.5 rounded-full border border-dark-border hover:border-gold-brand hover:text-gold-light text-dark-text-muted transition-all cursor-pointer"
                   title="Leer columna completa"
                 >
                   <ArrowRight size={14} />
@@ -99,7 +99,7 @@ export default function PrensaSection() {
         </div>
 
         {/* Mini Newsletter Sign-up */}
-        <div className="mt-16 p-8 bg-dark-card/40 border border-dark-border/40 rounded-2xl-lg grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="mt-16 p-8 bg-dark-card/40 border border-dark-border/40 rounded-3xl grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-6 space-y-2">
             <h4 className="font-display text-lg font-bold text-white">Suscríbase al Boletín de Precisión</h4>
             <p className="font-sans text-xs text-dark-text-muted">
@@ -160,12 +160,12 @@ export default function PrensaSection() {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="relative w-full max-w-2xl bg-dark-card border border-dark-border rounded-2xl-lg shadow-2xl overflow-hidden z-10"
+              className="relative w-full max-w-2xl bg-dark-card border border-dark-border rounded-3xl shadow-2xl overflow-hidden z-10"
             >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="absolute right-4 top-4 w-9 h-9 rounded-2xl-full border border-dark-border hover:border-gold-brand/40 bg-dark-card/80 flex items-center justify-center text-dark-text-muted hover:text-white transition-all cursor-pointer"
+                className="absolute right-4 top-4 w-9 h-9 rounded-full border border-dark-border hover:border-gold-brand/40 bg-dark-card/80 flex items-center justify-center text-dark-text-muted hover:text-white transition-all cursor-pointer"
                 aria-label="Cerrar artículo"
               >
                 <X size={16} />
@@ -174,7 +174,7 @@ export default function PrensaSection() {
               {/* Cover Top Meta */}
               <div className="p-8 bg-dark-bg/40 border-b border-dark-border/30">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="px-2.5 py-0.5 bg-gold-dark/20 text-gold-light rounded-2xl-sm font-bold uppercase tracking-wider text-[9px] border border-gold-brand/10">
+                  <span className="px-2.5 py-0.5 bg-gold-dark/20 text-gold-light rounded-lg font-bold uppercase tracking-wider text-[9px] border border-gold-brand/10">
                     {selectedArticle.category}
                   </span>
                   <div className="flex items-center gap-1.5 text-xs text-dark-text-muted font-sans">
@@ -195,7 +195,7 @@ export default function PrensaSection() {
               {/* Author Banner */}
               <div className="px-8 py-4 bg-gold-dark/5 border-b border-dark-border/30 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-2xl-full bg-gold-dark/20 border border-gold-brand/20 flex items-center justify-center text-gold-light">
+                  <div className="w-9 h-9 rounded-full bg-gold-dark/20 border border-gold-brand/20 flex items-center justify-center text-gold-light">
                     <User size={16} />
                   </div>
                   <div>

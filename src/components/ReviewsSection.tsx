@@ -58,7 +58,7 @@ export default function ReviewsSection() {
         
         {/* Header Block */}
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-2xl-sm">
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-lg">
             <ShieldCheck size={12} />
             Opinión de Nuestros Clientes
           </div>
@@ -79,7 +79,7 @@ export default function ReviewsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="p-8 bg-dark-card border border-dark-border/40 hover:border-gold-brand/30 rounded-2xl-lg space-y-6 relative group transition-all duration-300 shadow-xl shadow-black/5"
+              className="p-8 bg-dark-card border border-dark-border/40 hover:border-gold-brand/30 rounded-3xl space-y-6 relative group transition-all duration-300 shadow-xl shadow-black/5"
             >
               {/* Quote icon background ornament */}
               <div className="absolute top-6 right-6 text-gold-brand/10 group-hover:text-gold-brand/20 transition-colors duration-300">
@@ -105,7 +105,7 @@ export default function ReviewsSection() {
 
               {/* Author Info */}
               <div className="pt-4 border-t border-dark-border/20 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl-full bg-gold-dark/20 border border-gold-brand/30 flex items-center justify-center text-gold-light font-display font-semibold text-xs uppercase">
+                <div className="w-10 h-10 rounded-full bg-gold-dark/20 border border-gold-brand/30 flex items-center justify-center text-gold-light font-display font-semibold text-xs uppercase">
                   {review.author.split(' ').pop()?.substring(0, 2) || 'CL'}
                 </div>
                 <div className="space-y-0.5">

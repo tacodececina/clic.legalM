@@ -83,7 +83,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }: HeroProps) {
           <button
             id="hero-primary-action"
             onClick={onPrimaryClick}
-            className="w-full sm:w-auto bg-gold-brand hover:bg-gold-light text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-2xl-full transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-gold-brand/10 hover:shadow-xl hover:shadow-gold-brand/30 cursor-pointer"
+            className="w-full sm:w-auto bg-gold-brand hover:bg-gold-light text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-gold-brand/10 hover:shadow-xl hover:shadow-gold-brand/30 cursor-pointer"
           >
             Contáctanos
           </button>
@@ -91,7 +91,7 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }: HeroProps) {
           <button
             id="hero-secondary-action"
             onClick={onSecondaryClick}
-            className="w-full sm:w-auto bg-transparent border border-gold-brand/30 hover:border-gold-brand text-gold-light hover:text-white font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-2xl-full transition-all duration-300 hover:-translate-y-1 bg-white/[0.01] hover:bg-white/[0.04] cursor-pointer"
+            className="w-full sm:w-auto bg-transparent border border-gold-brand/30 hover:border-gold-brand text-gold-light hover:text-white font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-full transition-all duration-300 hover:-translate-y-1 bg-white/[0.01] hover:bg-white/[0.04] cursor-pointer"
           >
             Nuestra firma
           </button>

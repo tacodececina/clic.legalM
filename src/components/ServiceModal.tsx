@@ -70,7 +70,7 @@ export default function ServiceModal({ service, onClose, onSelectForConsultation
               </div>
               <button
                 onClick={onClose}
-                className="w-10 h-10 rounded-2xl-full border border-dark-border hover:border-gold-brand/40 flex items-center justify-center text-dark-text-muted hover:text-white transition-all cursor-pointer"
+                className="w-10 h-10 rounded-full border border-dark-border hover:border-gold-brand/40 flex items-center justify-center text-dark-text-muted hover:text-white transition-all cursor-pointer"
                 aria-label="Cerrar ficha"
               >
                 <X size={18} />
@@ -137,7 +137,7 @@ export default function ServiceModal({ service, onClose, onSelectForConsultation
                       key={idx}
                       className="p-3 bg-dark-bg/40 border border-dark-border/30 rounded-2xl text-xs font-semibold text-white font-sans flex items-center gap-2.5"
                     >
-                      <div className="w-1.5 h-1.5 bg-gold-brand rounded-2xl-full shrink-0" />
+                      <div className="w-1.5 h-1.5 bg-gold-brand rounded-full shrink-0" />
                       <span>{item}</span>
                     </div>
                   ))}

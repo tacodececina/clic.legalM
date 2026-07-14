@@ -6,7 +6,7 @@ export const PILLARS: Pillar[] = [
     name: 'Área Legal',
     tagline: 'Seguridad y Defensa Jurídica',
     description: 'Te brindamos soluciones legales claras y efectivas, protegiendo tus intereses con un enfoque humano y profesional en cada paso del proceso.',
-    image: 'https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&q=80&w=800',
+    image: '/img/legal.jpg',
     services: [
       {
         id: 'familiar',
@@ -96,7 +96,7 @@ export const PILLARS: Pillar[] = [
     name: 'Área Contable',
     tagline: 'Tranquilidad Administrativa',
     description: 'Mantenemos tus números en orden y al día. Te ayudamos a cumplir con tus obligaciones fiscales sin estrés, optimizando tus recursos de manera segura.',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=800',
+    image: '/img/contable.jpg',
     services: [
       {
         id: 'estrategia-fiscal',
@@ -168,7 +168,7 @@ export const PILLARS: Pillar[] = [
     name: 'Área de Psicología',
     tagline: 'Acompañamiento en Procesos Críticos',
     description: 'Ofrecemos soporte psicológico clínico y pericial de primer nivel para resguardar la estabilidad emocional de personas y directivos en entornos judiciales y de alta presión organizativa.',
-    image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&q=80&w=800',
+    image: '/img/psicologia.jpg',
     services: [
       {
         id: 'psicologia-forense',

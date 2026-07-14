@@ -6,9 +6,10 @@ import { ContactSubmission } from '../types';
 interface ContactSectionProps {
   preselectedService?: string;
   onClearPreselectedService?: () => void;
+  initialMessage?: string;
 }
 
-export default function ContactSection({ preselectedService, onClearPreselectedService }: ContactSectionProps) {
+export default function ContactSection({ preselectedService, onClearPreselectedService, initialMessage }: ContactSectionProps) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [serviceInterest, setServiceInterest] = useState('Asesoría Integral');
@@ -40,6 +41,13 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
       }
     }
   }, [preselectedService]);
+
+  // Seed the message textarea when an estimation summary is passed in (e.g. from ScopeEstimator)
+  useEffect(() => {
+    if (initialMessage) {
+      setMessage(initialMessage);
+    }
+  }, [initialMessage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -195,7 +203,7 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
         </div>
 
         {/* Right Side: Form Container */}
-        <div className="lg:col-span-7 bg-dark-card border border-dark-border/50 rounded-2xl-lg p-8 md:p-10 relative overflow-hidden">
+        <div className="lg:col-span-7 bg-dark-card border border-dark-border/50 rounded-3xl p-8 md:p-10 relative overflow-hidden">
           
           <AnimatePresence mode="wait">
             {!submittedData ? (
@@ -288,7 +296,7 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-dark-bg border-t-transparent rounded-2xl-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-dark-bg border-t-transparent rounded-full animate-spin" />
                         <span>Validando Expediente...</span>
                       </>
                     ) : (
@@ -305,7 +313,7 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
                 exit={{ opacity: 0 }}
                 className="text-center py-10 space-y-6"
               >
-                <div className="w-16 h-16 rounded-2xl-full bg-gold-dark/20 border border-gold-brand flex items-center justify-center text-gold-light mx-auto">
+                <div className="w-16 h-16 rounded-full bg-gold-dark/20 border border-gold-brand flex items-center justify-center text-gold-light mx-auto">
                   <CheckCircle size={32} />
                 </div>
                 

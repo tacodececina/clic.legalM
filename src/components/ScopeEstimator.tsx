@@ -25,7 +25,7 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
     { id: 'tax-audit', label: 'Auditoría Fiscal y Contable', type: 'contable', weight: 25 },
     { id: 'tax-opt', label: 'Optimización Tributaria Estratégica', type: 'contable', weight: 30 },
     { id: 'forensic-psych', label: 'Peritaje o Soporte Psicológico Judicial', type: 'psicologia', weight: 20 },
-    { id: 'crisis-mediaton', label: 'Mediación de Conflictos de Socios', type: 'psicologia', weight: 25 }
+    { id: 'crisis-mediation', label: 'Mediación de Conflictos de Socios', type: 'psicologia', weight: 25 }
   ];
 
   const handleToggleModule = (id: string) => {
@@ -68,7 +68,7 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
     let actionPlan = '';
     const hasLegal = selectedModules.some(m => ['corp-governance', 'litigation', 'ip-brand'].includes(m));
     const hasAccounting = selectedModules.some(m => ['tax-audit', 'tax-opt'].includes(m));
-    const hasPsychology = selectedModules.some(m => ['forensic-psych', 'crisis-mediaton'].includes(m));
+    const hasPsychology = selectedModules.some(m => ['forensic-psych', 'crisis-mediation'].includes(m));
 
     if (hasLegal && hasAccounting && hasPsychology) {
       actionPlan = 'Acompañamiento corporativo premium con auditoría de estados, blindaje mercantil y apoyo en mediación psicológica ejecutiva.';
@@ -101,7 +101,7 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
         
         {/* Section Title */}
         <div className="mb-16 text-center">
-          <div className="inline-flex items-center gap-2 mb-3 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3.5 py-1 rounded-2xl-full text-xs font-semibold uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 mb-3 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">
             <Calculator size={13} />
             HERRAMIENTA DE PLANEACIÓN
           </div>
@@ -121,18 +121,18 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
             {/* Step 1: Profile Selection */}
             <div className="space-y-4">
               <h4 className="font-display text-xs font-bold tracking-widest text-gold-light uppercase flex items-center gap-2">
-                <span className="w-5 h-5 bg-gold-dark/20 text-gold-light rounded-2xl-full flex items-center justify-center text-[10px] font-bold">1</span>
+                <span className="w-5 h-5 bg-gold-dark/20 text-gold-light rounded-full flex items-center justify-center text-[10px] font-bold">1</span>
                 Perfil de la Entidad u Organización
               </h4>
               <div className="grid grid-cols-3 gap-3">
-                {[
+                {([
                   { id: 'individual', title: 'Persona Física', desc: 'Profesionales, herencias, soporte' },
                   { id: 'pyme', title: 'PYME / Startup', desc: 'Estructura ágil, cumplimiento' },
                   { id: 'corporativo', title: 'Corporación', desc: 'Estructuras complejas, auditorías' }
-                ].map((p) => (
+                ] as const).map((p) => (
                   <button
                     key={p.id}
-                    onClick={() => setProfile(p.id as any)}
+                    onClick={() => setProfile(p.id)}
                     className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                       profile === p.id
                         ? 'border-gold-brand bg-gold-dark/10 text-white'
@@ -149,7 +149,7 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
             {/* Step 2: Practice Modules Selection */}
             <div className="space-y-4">
               <h4 className="font-display text-xs font-bold tracking-widest text-gold-light uppercase flex items-center gap-2">
-                <span className="w-5 h-5 bg-gold-dark/20 text-gold-light rounded-2xl-full flex items-center justify-center text-[10px] font-bold">2</span>
+                <span className="w-5 h-5 bg-gold-dark/20 text-gold-light rounded-full flex items-center justify-center text-[10px] font-bold">2</span>
                 Módulos de Asesoramiento Crítico
               </h4>
               <p className="text-[11px] text-dark-text-muted/60 font-sans">
@@ -162,8 +162,17 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
                   return (
                     <div
                       key={mod.id}
+                      role="checkbox"
+                      aria-checked={isChecked}
+                      tabIndex={0}
                       onClick={() => handleToggleModule(mod.id)}
-                      className={`p-3.5 rounded-2xl border flex items-center justify-between transition-all cursor-pointer ${
+                      onKeyDown={(e) => {
+                        if (e.key === ' ' || e.key === 'Enter') {
+                          e.preventDefault();
+                          handleToggleModule(mod.id);
+                        }
+                      }}
+                      className={`p-3.5 rounded-2xl border flex items-center justify-between transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-brand ${
                         isChecked
                           ? 'border-gold-brand/40 bg-gold-dark/5 text-white'
                           : 'border-dark-border/40 bg-dark-bg/60 text-dark-text-muted hover:border-dark-border/80'
@@ -173,8 +182,10 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
                         <input
                           type="checkbox"
                           checked={isChecked}
-                          onChange={() => {}} // handled by div click
-                          className="w-4 h-4 rounded-2xl border-dark-border/60 accent-gold-brand text-dark-bg"
+                          readOnly
+                          tabIndex={-1}
+                          aria-hidden="true"
+                          className="w-4 h-4 rounded border-dark-border/60 accent-gold-brand text-dark-bg pointer-events-none"
                         />
                         <span className="font-sans text-xs md:text-sm font-medium">{mod.label}</span>
                       </div>
@@ -194,17 +205,17 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
             {/* Step 3: Urgency / Priority Selection */}
             <div className="space-y-4">
               <h4 className="font-display text-xs font-bold tracking-widest text-gold-light uppercase flex items-center gap-2">
-                <span className="w-5 h-5 bg-gold-dark/20 text-gold-light rounded-2xl-full flex items-center justify-center text-[10px] font-bold">3</span>
+                <span className="w-5 h-5 bg-gold-dark/20 text-gold-light rounded-full flex items-center justify-center text-[10px] font-bold">3</span>
                 Prioridad y Tiempos de Entrega
               </h4>
               <div className="flex gap-4">
-                {[
+                {([
                   { id: 'normal', label: 'Estándar (Plazos Ordinarios)', desc: 'Recomendado para planeaciones estratégicas' },
                   { id: 'alta', label: 'Alta (Intervención Inmediata)', desc: 'Auditorías en curso, notificaciones judiciales' }
-                ].map((u) => (
+                ] as const).map((u) => (
                   <button
                     key={u.id}
-                    onClick={() => setUrgency(u.id as any)}
+                    onClick={() => setUrgency(u.id)}
                     className={`flex-1 p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
                       urgency === u.id
                         ? 'border-gold-brand bg-gold-dark/10 text-white'
@@ -221,10 +232,10 @@ export default function ScopeEstimator({ onApplyEstimation }: ScopeEstimatorProp
           </div>
 
           {/* Results Summary Card (5 cols) */}
-          <div className="lg:col-span-5 bg-dark-card border border-dark-border p-8 rounded-2xl-lg relative overflow-hidden space-y-6">
+          <div className="lg:col-span-5 bg-dark-card border border-dark-border p-8 rounded-3xl relative overflow-hidden space-y-6">
             
             {/* Top Indicator background blur */}
-            <div className="absolute right-0 top-0 w-32 h-32 bg-gold-brand/10 rounded-2xl-full blur-2xl pointer-events-none" />
+            <div className="absolute right-0 top-0 w-32 h-32 bg-gold-brand/10 rounded-full blur-2xl pointer-events-none" />
 
             <div className="border-b border-dark-border/40 pb-4">
               <span className="font-mono text-[9px] font-bold tracking-wider uppercase text-gold-light">

@@ -15,7 +15,7 @@ export default function FaqSection() {
         
         {/* Section Title */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-2xl-sm text-[10px] font-bold tracking-widest uppercase mb-3">
+          <div className="inline-flex items-center gap-2 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-lg text-[10px] font-bold tracking-widest uppercase mb-3">
             <HelpCircle size={12} />
             Dudas Frecuentes
           </div>

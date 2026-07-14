@@ -31,7 +31,7 @@ export default function AboutUs() {
         {/* Visual Intro */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-20">
           <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-2xl-sm text-[10px] font-bold tracking-widest uppercase">
+            <div className="inline-flex items-center gap-2 text-gold-light bg-gold-dark/10 border border-gold-brand/20 px-3 py-1 rounded-lg text-[10px] font-bold tracking-widest uppercase">
               <Compass size={12} />
               Nuestra Identidad
             </div>
@@ -53,16 +53,16 @@ export default function AboutUs() {
             </div>
           </div>
           <div className="lg:col-span-6 relative">
-            <div className="aspect-video w-full rounded-2xl-lg overflow-hidden border border-dark-border/60 relative">
+            <div className="aspect-video w-full rounded-3xl overflow-hidden border border-dark-border/60 relative">
               <img
-                src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=1200"
+                src="/img/nosotros.jpg"
                 alt="Oficinas Clic Legal"
                 className="w-full h-full object-cover filter grayscale contrast-115 brightness-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-dark-bg/60 to-transparent" />
             </div>
             {/* Ambient decorative shadow */}
-            <div className="absolute -inset-1 bg-gold-brand/5 rounded-2xl-lg blur-xl z-[-1] pointer-events-none" />
+            <div className="absolute -inset-1 bg-gold-brand/5 rounded-3xl blur-xl z-[-1] pointer-events-none" />
           </div>
         </div>
 
@@ -85,7 +85,7 @@ export default function AboutUs() {
               desc: 'Los litigios y auditorías estresan. Protegemos su patrimonio mientras resguardamos activamente su paz mental.'
             }
           ].map((v, i) => (
-            <div key={i} className="p-6 bg-dark-card border border-dark-border/40 rounded-2xl-lg space-y-4">
+            <div key={i} className="p-6 bg-dark-card border border-dark-border/40 rounded-3xl space-y-4">
               <div className="w-11 h-11 bg-gold-dark/20 border border-gold-brand/20 flex items-center justify-center rounded-2xl">
                 {v.icon}
               </div>
@@ -111,10 +111,10 @@ export default function AboutUs() {
             {team.map((member, idx) => (
               <div
                 key={idx}
-                className="p-6 bg-dark-card border border-dark-border/40 hover:border-gold-brand/30 rounded-2xl-lg flex flex-col items-center text-center space-y-4 group transition-all"
+                className="p-6 bg-dark-card border border-dark-border/40 hover:border-gold-brand/30 rounded-3xl flex flex-col items-center text-center space-y-4 group transition-all"
               >
                 {/* Visual Avatar frame */}
-                <div className="w-16 h-16 rounded-2xl-full bg-gold-dark/10 border-2 border-gold-brand/30 flex items-center justify-center text-gold-light text-lg font-bold font-display group-hover:border-gold-brand group-hover:bg-gold-dark/20 transition-all">
+                <div className="w-16 h-16 rounded-full bg-gold-dark/10 border-2 border-gold-brand/30 flex items-center justify-center text-gold-light text-lg font-bold font-display group-hover:border-gold-brand group-hover:bg-gold-dark/20 transition-all">
                   {member.avatar}
                 </div>
                 <div className="space-y-1">

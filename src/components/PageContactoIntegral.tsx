@@ -84,7 +84,7 @@ export default function PageContactoIntegral() {
         
         {/* General Integral Form */}
         <div>
-          <div className="bg-dark-card border border-dark-border/50 rounded-2xl-lg p-8 md:p-10 relative overflow-hidden shadow-2xl">
+          <div className="bg-dark-card border border-dark-border/50 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-2xl">
             
             <AnimatePresence mode="wait">
               {!submitted ? (
@@ -152,7 +152,7 @@ export default function PageContactoIntegral() {
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-dark-bg border-t-transparent rounded-2xl-full animate-spin" />
+                          <div className="w-4 h-4 border-2 border-dark-bg border-t-transparent rounded-full animate-spin" />
                           <span>Enviando...</span>
                         </>
                       ) : (
@@ -169,7 +169,7 @@ export default function PageContactoIntegral() {
                   exit={{ opacity: 0 }}
                   className="text-center py-8 space-y-6"
                 >
-                  <div className="w-14 h-14 rounded-2xl-full bg-gold-dark/20 border border-gold-brand flex items-center justify-center text-gold-light mx-auto">
+                  <div className="w-14 h-14 rounded-full bg-gold-dark/20 border border-gold-brand flex items-center justify-center text-gold-light mx-auto">
                     <CheckCircle size={28} />
                   </div>
                   

@@ -37,7 +37,7 @@ export default function PagePsicologia() {
       <div className="relative py-24 overflow-hidden border-b border-dark-border/20">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&q=80&w=1200"
+            src="/img/oficina.jpg"
             alt="Área de Psicología"
             className="w-full h-full object-cover opacity-50"
           />

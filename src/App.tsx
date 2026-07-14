@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
+import Pilars from './components/Pilars';
+import ScopeEstimator from './components/ScopeEstimator';
+import ContactSection from './components/ContactSection';
 import Partners from './components/Partners';
 import ReviewsSection from './components/ReviewsSection';
 import FaqSection from './components/FaqSection';
@@ -22,6 +25,9 @@ import { ArrowUp, Video } from 'lucide-react';
 export default function App() {
   const [activeSection, setActiveSection] = useState('inicio');
   const [showScrollTop, setShowScrollTop] = useState(false);
+  // Pasarela estimador → formulario de contacto de la home
+  const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
+  const [estimationDraft, setEstimationDraft] = useState<string | undefined>(undefined);
 
   // Monitor scrolling to show "back to top" button
   useEffect(() => {
@@ -70,7 +76,12 @@ export default function App() {
               onPrimaryClick={() => handleNavigate('contacto')}
               onSecondaryClick={() => handleNavigate('nosotros')}
             />
-            
+
+            <Pilars
+              onSelectPillar={(pillarId) => handleNavigate(pillarId)}
+              onSelectService={() => handleNavigate('contacto')}
+            />
+
             <div className="bg-dark-bg pt-12 pb-4">
               <div className="max-w-7xl mx-auto px-6">
                 <div className="bg-gold-dark/10 backdrop-blur-md border border-gold-brand/20 p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
@@ -87,7 +98,22 @@ export default function App() {
               </div>
             </div>
 
+            <ScopeEstimator
+              onApplyEstimation={(summaryText, serviceTitle) => {
+                setEstimationDraft(summaryText);
+                setPreselectedService(serviceTitle);
+              }}
+            />
+
             <ReviewsSection />
+            <Partners />
+            <FaqSection />
+
+            <ContactSection
+              preselectedService={preselectedService}
+              onClearPreselectedService={() => setPreselectedService(undefined)}
+              initialMessage={estimationDraft}
+            />
           </>
         );
     }
@@ -126,7 +152,7 @@ export default function App() {
       {showScrollTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 bg-gold-brand hover:bg-gold-light text-dark-bg rounded-2xl-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-90 transition-all cursor-pointer"
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 bg-gold-brand hover:bg-gold-light text-dark-bg rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-90 transition-all cursor-pointer"
           aria-label="Regresar arriba"
         >
           <ArrowUp size={20} />

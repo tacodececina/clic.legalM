@@ -37,7 +37,7 @@ export default function Pilars({ onSelectService, onSelectPillar }: PilarsProps)
             id="pillar-card-legal"
             whileHover={{ y: -6, borderColor: 'rgba(148,124,99,0.5)' }}
             transition={{ duration: 0.3 }}
-            className="relative bg-dark-card border border-dark-border/60 p-8 rounded-2xl-lg overflow-hidden flex flex-col justify-between min-h-[400px]"
+            className="relative bg-dark-card border border-dark-border/60 p-8 rounded-3xl overflow-hidden flex flex-col justify-between min-h-[400px]"
           >
             {/* Background geometric watermark scale */}
             <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-[0.03] text-gold-light pointer-events-none">
@@ -46,7 +46,7 @@ export default function Pilars({ onSelectService, onSelectPillar }: PilarsProps)
 
             <div>
               {/* Tag */}
-              <span className="inline-block bg-gold-dark/20 text-gold-light text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-2xl-sm mb-6 border border-gold-brand/20">
+              <span className="inline-block bg-gold-dark/20 text-gold-light text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-lg mb-6 border border-gold-brand/20">
                 ÁREA LEGAL
               </span>
 
@@ -91,11 +91,11 @@ export default function Pilars({ onSelectService, onSelectPillar }: PilarsProps)
             id="pillar-card-contable"
             whileHover={{ y: -6, borderColor: 'rgba(148,124,99,0.5)' }}
             transition={{ duration: 0.3 }}
-            className="relative bg-dark-card border border-dark-border/60 p-8 rounded-2xl-lg overflow-hidden flex flex-col justify-between min-h-[400px]"
+            className="relative bg-dark-card border border-dark-border/60 p-8 rounded-3xl overflow-hidden flex flex-col justify-between min-h-[400px]"
           >
             <div>
               {/* Tag */}
-              <span className="inline-block bg-gold-dark/20 text-gold-light text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-2xl-sm mb-6 border border-gold-brand/20">
+              <span className="inline-block bg-gold-dark/20 text-gold-light text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-lg mb-6 border border-gold-brand/20">
                 CONTABILIDAD
               </span>
 
@@ -122,7 +122,7 @@ export default function Pilars({ onSelectService, onSelectPillar }: PilarsProps)
                       <span className="font-sans text-sm font-semibold text-dark-text group-hover:text-gold-light transition-colors">
                         {service.title}
                       </span>
-                      <div className="w-8 h-8 rounded-2xl-sm bg-gold-dark/10 border border-gold-brand/10 flex items-center justify-center text-gold-light group-hover:border-gold-brand group-hover:bg-gold-brand group-hover:text-dark-bg transition-all">
+                      <div className="w-8 h-8 rounded-lg bg-gold-dark/10 border border-gold-brand/10 flex items-center justify-center text-gold-light group-hover:border-gold-brand group-hover:bg-gold-brand group-hover:text-dark-bg transition-all">
                         {isAudit ? <FileSpreadsheet size={14} /> : <Percent size={14} />}
                       </div>
                     </div>
@@ -150,14 +150,14 @@ export default function Pilars({ onSelectService, onSelectPillar }: PilarsProps)
           id="pillar-card-psicologia"
           whileHover={{ y: -4, borderColor: 'rgba(148,124,99,0.5)' }}
           transition={{ duration: 0.3 }}
-          className="bg-dark-card border border-dark-border/60 rounded-2xl-lg overflow-hidden"
+          className="bg-dark-card border border-dark-border/60 rounded-3xl overflow-hidden"
         >
           <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
             
             {/* Image Column */}
             <div className="md:col-span-5 h-64 md:h-auto min-h-[300px] relative">
               <img
-                src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=800"
+                src="/img/psicologia-apoyo.jpg"
                 alt="Psicología de Apoyo"
                 className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-110 brightness-90 hover:scale-105 hover:grayscale-0 transition-all duration-700"
               />
@@ -168,7 +168,7 @@ export default function Pilars({ onSelectService, onSelectPillar }: PilarsProps)
             <div className="md:col-span-7 p-8 md:p-12 flex flex-col justify-between">
               <div>
                 {/* Tag */}
-                <span className="inline-block bg-gold-dark/20 text-gold-light text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-2xl-sm mb-6 border border-gold-brand/20">
+                <span className="inline-block bg-gold-dark/20 text-gold-light text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-lg mb-6 border border-gold-brand/20">
                   PSICOLOGÍA
                 </span>
 

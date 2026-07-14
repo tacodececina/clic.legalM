@@ -76,7 +76,7 @@ export default function Header({ onContactClick, onNavigate, activeSection }: He
               >
                 {item.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold-brand rounded-2xl-full" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold-brand rounded-full" />
                 )}
               </button>
             );
@@ -88,7 +88,7 @@ export default function Header({ onContactClick, onNavigate, activeSection }: He
           <button
             id="header-contact-btn"
             onClick={onContactClick}
-            className="hidden sm:flex items-center gap-2 bg-gold-brand hover:bg-gold-light text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-5 py-2.5 rounded-2xl-2xl transition-all duration-300 hover:-translate-y-0.5 shadow-md shadow-gold-brand/10 hover:shadow-xl hover:shadow-gold-brand/20 cursor-pointer"
+            className="hidden sm:flex items-center gap-2 bg-gold-brand hover:bg-gold-light text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-5 py-2.5 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 shadow-md shadow-gold-brand/10 hover:shadow-xl hover:shadow-gold-brand/20 cursor-pointer"
           >
             <PhoneCall size={14} />
             Contáctanos
@@ -132,7 +132,7 @@ export default function Header({ onContactClick, onNavigate, activeSection }: He
                 onContactClick();
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 bg-gold-brand hover:bg-gold-light text-dark-bg font-sans font-bold text-sm uppercase tracking-widest py-3.5 rounded-2xl-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg"
+              className="w-full flex items-center justify-center gap-2 bg-gold-brand hover:bg-gold-light text-dark-bg font-sans font-bold text-sm uppercase tracking-widest py-3.5 rounded-2xl transition-all duration-300 hover:-translate-y-1 shadow-lg"
             >
               <PhoneCall size={16} />
               Contáctanos Directo

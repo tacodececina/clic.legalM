@@ -18,7 +18,7 @@ export default function PageNosotros() {
       <div className="relative py-24 overflow-hidden border-b border-dark-border/20">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&q=80&w=1200"
+            src="/img/oficina.jpg"
             alt="Nosotros Clic Legal"
             className="w-full h-full object-cover opacity-30"
           />
@@ -101,7 +101,7 @@ export default function PageNosotros() {
 
           <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-dark-border/50">
              <div className="w-full h-full bg-dark-card flex items-center justify-center flex-col gap-4 p-8 text-center relative group cursor-pointer" onClick={() => window.open('https://youtube.com/@cliclegal-z8f?si=Rd4gqXkKYiij3qmE', '_blank')}>
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&q=80&w=1200')] bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity" />
+                <div className="absolute inset-0 bg-[url('/img/equipo.jpg')] bg-cover bg-center opacity-30 group-hover:opacity-40 transition-opacity" />
                 <div className="w-16 h-16 bg-red-600 text-white rounded-full flex items-center justify-center z-10 group-hover:scale-110 transition-transform shadow-lg">
                   <Play className="ml-1" size={32} />
                 </div>

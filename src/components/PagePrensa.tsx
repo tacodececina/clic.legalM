@@ -22,7 +22,7 @@ export default function PagePrensa() {
       <div className="relative py-20 overflow-hidden border-b border-dark-border/20">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200"
+            src="/img/prensa.jpg"
             alt="Prensa y Artículos"
             className="w-full h-full object-cover opacity-40"
           />
@@ -75,7 +75,7 @@ export default function PagePrensa() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="space-y-8 bg-dark-card/40 backdrop-blur-md border border-dark-border/50 p-8 md:p-12 rounded-2xl-lg shadow-2xl"
+              className="space-y-8 bg-dark-card/40 backdrop-blur-md border border-dark-border/50 p-8 md:p-12 rounded-3xl shadow-2xl"
             >
               <button
                 onClick={() => setActiveArticle(null)}
@@ -98,8 +98,8 @@ export default function PagePrensa() {
               </div>
 
               {/* Author Card */}
-              <div className="flex items-center gap-3 p-4 bg-dark-bg/60 border border-dark-border/40 rounded-2xl-lg max-w-md">
-                <div className="w-10 h-10 rounded-2xl-full bg-gold-dark/20 border border-gold-brand/20 flex items-center justify-center text-gold-light font-bold font-display text-xs">
+              <div className="flex items-center gap-3 p-4 bg-dark-bg/60 border border-dark-border/40 rounded-3xl max-w-md">
+                <div className="w-10 h-10 rounded-full bg-gold-dark/20 border border-gold-brand/20 flex items-center justify-center text-gold-light font-bold font-display text-xs">
                   {activeArticle.author.split(' ').pop()?.substring(0, 2) || 'AU'}
                 </div>
                 <div>
@@ -131,7 +131,7 @@ export default function PagePrensa() {
                 {filteredNews.map((item) => (
                   <article
                     key={item.id}
-                    className="p-6 bg-dark-card/40 backdrop-blur-md border border-dark-border/40 hover:border-gold-brand/30 rounded-2xl-lg flex flex-col justify-between group transition-all duration-300 relative shadow-xl hover:-translate-y-1"
+                    className="p-6 bg-dark-card/40 backdrop-blur-md border border-dark-border/40 hover:border-gold-brand/30 rounded-3xl flex flex-col justify-between group transition-all duration-300 relative shadow-xl hover:-translate-y-1"
                   >
                     <div className="space-y-4">
                       <div className="flex items-center justify-between text-[9px] font-sans font-bold tracking-widest text-gold-brand uppercase">

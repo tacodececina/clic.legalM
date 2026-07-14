@@ -11,7 +11,6 @@ interface ContactFormProps {
 export default function ContactForm({ category, title, subtitle }: ContactFormProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [desc, setDesc] = useState('');
   const [service, setService] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -157,7 +156,7 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
               </p>
             </div>
 
-            <button onClick={() => { setSubmitted(false); setName(''); setEmail(''); setPhone(''); setDesc(''); setService(''); }} className="bg-transparent border border-gold-brand/40 hover:border-gold-brand text-gold-light hover:text-white font-sans font-bold text-[10px] uppercase tracking-widest px-6 py-2 rounded-2xl transition-all cursor-pointer">
+            <button onClick={() => { setSubmitted(false); setName(''); setEmail(''); setDesc(''); setService(''); }} className="bg-transparent border border-gold-brand/40 hover:border-gold-brand text-gold-light hover:text-white font-sans font-bold text-[10px] uppercase tracking-widest px-6 py-2 rounded-2xl transition-all cursor-pointer">
               Enviar otro mensaje
             </button>
           </motion.div>
