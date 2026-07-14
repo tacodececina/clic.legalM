@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: clic-legal-web:latest
+    container_name: clic-legal-web-1
+    restart: always
+    ports:
+      - "127.0.0.1:3012:3012"   # sólo local; el nginx del host hace proxy_pass
+    environment:
+      - NODE_ENV=production
+      - PORT=3012
+      - DATA_DIR=/app/data
+    volumes:
+      - /opt/clic-legal-web/data:/app/data:rw   # leads persistidos fuera del contenedor
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3012/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - cliclegalweb_net
+networks:
+  cliclegalweb_net:
+    driver: bridge
