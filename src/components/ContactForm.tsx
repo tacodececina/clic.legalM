@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Send } from 'lucide-react';
+import { submitLead } from '../lib/leads';
 
 interface ContactFormProps {
   category: 'legal' | 'contable' | 'psicologia' | 'prensa';
@@ -16,23 +17,40 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [ticketId, setTicketId] = useState('');
+  const [error, setError] = useState('');
+  const [hp, setHp] = useState(''); // honeypot
 
-  const targetEmail = category === 'psicologia' ? 'psicologia@clic.legal' : (category === 'prensa' ? 'prensa@clic.legal' : 'juridico@clic.legal');
+  const targetEmail = category === 'psicologia' ? 'psicologia@clic.legal' : (category === 'prensa' ? 'hola@clic.legal' : 'juridico@clic.legal');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email) return;
 
+    setError('');
     setIsSubmitting(true);
-    setTimeout(() => {
-      setTicketId(`CL-${category.substring(0, 3).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`);
-      setSubmitted(true);
-      setIsSubmitting(false);
-      
-      // Intentar abrir el cliente de correo (opcional, pero cumple con "enviar a correo")
-      // window.location.href = `mailto:${targetEmail}?subject=Solicitud de ${name} - ${service}&body=${encodeURIComponent(desc)}%0A%0AContacto: ${phone}%0ACorreo: ${email}`;
-      
-    }, 1200);
+
+    // El campo "email" acepta correo O teléfono: lo separamos por la presencia de "@".
+    const contact = email.trim();
+    const isMail = contact.includes('@');
+
+    const result = await submitLead({
+      name,
+      email: isMail ? contact : undefined,
+      phone: isMail ? undefined : contact,
+      category,
+      service,
+      message: desc,
+      source: `contacto-${category}`,
+      company_website: hp,
+    });
+
+    setIsSubmitting(false);
+    if (!result.ok) {
+      setError(result.error || 'No se pudo enviar. Intenta de nuevo.');
+      return;
+    }
+    setTicketId(result.id || '');
+    setSubmitted(true);
   };
 
   const getServiceOptions = () => {
@@ -66,6 +84,16 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Honeypot anti-bots: oculto para humanos, tentador para bots. */}
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={hp}
+                onChange={(e) => setHp(e.target.value)}
+                className="hidden"
+                aria-hidden="true"
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-xs font-sans font-bold text-dark-text-muted mb-2 tracking-wider">
@@ -120,6 +148,10 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
                   />
                 </div>
               </div>
+
+              {error && (
+                <p className="text-xs text-red-400 text-center" role="alert">{error}</p>
+              )}
 
               <button type="submit" disabled={isSubmitting} className="w-full bg-gold-brand hover:bg-gold-light disabled:bg-gold-muted text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
                 {isSubmitting ? (

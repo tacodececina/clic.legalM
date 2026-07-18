@@ -1,13 +1,14 @@
 // Servidor de producción de Clic Legal.
-// Sirve el build estático de Vite (dist/) y expone el endpoint de captura de
-// leads que la Fase 2 conectará a los formularios (hoy simulados en el front).
-// Corre detrás del nginx del host, que ya enruta /agente -> app Python (:8500),
+// Sirve el build estático de Vite (dist/) y expone /api/lead: persiste cada
+// prospecto y avisa por correo al buzón del área correspondiente.
+// Corre detrás del nginx del host, que enruta /agente -> app Python (:8500),
 // así que aquí sólo llega el tráfico de la raíz del sitio.
 
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
+import nodemailer from 'nodemailer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3012;
@@ -15,49 +16,129 @@ const DIST = path.join(__dirname, 'dist');
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.jsonl');
 
+// --- Correo -----------------------------------------------------------------
+// El VPS hospeda clic.legal en su propio Postfix, así que entregamos a los
+// buzones locales sin autenticación (sólo hace falta alcanzar el puerto 25 del
+// host vía host.docker.internal). No es relay externo, es entrega local.
+const LEAD_FROM = process.env.LEAD_FROM || 'noreply@clic.legal';
+const LEAD_FALLBACK = process.env.LEAD_FALLBACK || 'hola@clic.legal';
+
+// Ruteo por categoría -> buzón del área. Ajustable sin tocar el front.
+const MAILBOXES = {
+  legal: 'juridico@clic.legal',
+  contable: 'contabilidad@clic.legal',
+  psicologia: 'psicologia@clic.legal',
+  prensa: LEAD_FALLBACK,
+  integral: LEAD_FALLBACK,
+};
+
+const mailer = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'host.docker.internal',
+  port: Number(process.env.SMTP_PORT || 25),
+  secure: false,
+  ignoreTLS: true, // tráfico host-local en :25, sin STARTTLS
+  // Si el MTA no responde, no colgamos la petición del lead (ya está en disco).
+  connectionTimeout: 5000,
+  greetingTimeout: 5000,
+  socketTimeout: 8000,
+});
+
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', 1); // detrás del nginx del host: X-Forwarded-For/Proto reales
 app.use(express.json({ limit: '32kb' }));
 
-// Healthcheck para el HEALTHCHECK de Docker / compose.
 app.get('/healthz', (_req, res) => res.status(200).json({ ok: true }));
 
-// --- Captura de leads (infra lista para Fase 2) -----------------------------
-// Persiste cada prospecto como una línea JSON en un archivo bind-montado, para
-// que nada se pierda aunque todavía no haya CRM/correo. La POLÍTICA de qué hacer
-// con el lead (notificar por correo, validación estricta, anti-spam) es una
-// decisión de negocio de la Fase 2; aquí queda el mínimo que no pierde datos.
 const isEmail = (s) => typeof s === 'string' && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s);
+const clean = (v, max) => (v == null ? null : String(v).slice(0, max));
+
+function ticketId(category) {
+  const cat = String(category || 'gen').substring(0, 3).toUpperCase();
+  const rnd = Math.floor(1000 + Math.random() * 9000);
+  return `CL-${cat}-${rnd}`;
+}
+
+async function notify(lead) {
+  const to = MAILBOXES[lead.category] || LEAD_FALLBACK;
+  const lines = [
+    `Nuevo prospecto desde clic.legal`,
+    `Ticket: ${lead.id}`,
+    ``,
+    `Nombre:   ${lead.name}`,
+    `Correo:   ${lead.email || '—'}`,
+    `Teléfono: ${lead.phone || '—'}`,
+    `Servicio: ${lead.service || '—'}`,
+    lead.company ? `Empresa:  ${lead.company}` : null,
+    lead.needs && lead.needs.length ? `Áreas:    ${lead.needs.join(', ')}` : null,
+    `Origen:   ${lead.source}`,
+    ``,
+    `Mensaje:`,
+    lead.message || '(sin mensaje)',
+  ].filter((l) => l !== null);
+  await mailer.sendMail({
+    from: `Clic Legal Web <${LEAD_FROM}>`,
+    to,
+    replyTo: isEmail(lead.email) ? lead.email : undefined,
+    subject: `[Lead ${lead.id}] ${lead.name} — ${lead.service || lead.category}`,
+    text: lines.join('\n'),
+  });
+  return to;
+}
 
 app.post('/api/lead', async (req, res) => {
-  const { name, email, phone, message, source } = req.body || {};
-  if (!name || !isEmail(email)) {
-    return res.status(400).json({ ok: false, error: 'name y email válido son obligatorios' });
+  const b = req.body || {};
+
+  // Honeypot: bots rellenan campos ocultos. Aceptamos en silencio y descartamos.
+  if (b.company_website) return res.status(200).json({ ok: true });
+
+  const name = clean(b.name, 200);
+  const email = isEmail(b.email) ? clean(b.email, 200) : null;
+  const phone = clean(b.phone, 40);
+  // name + al menos un medio de contacto (correo válido o teléfono)
+  if (!name || (!email && !phone)) {
+    return res.status(400).json({ ok: false, error: 'Falta el nombre o un medio de contacto (correo o teléfono).' });
   }
+
   const lead = {
-    name: String(name).slice(0, 200),
-    email: String(email).slice(0, 200),
-    phone: phone ? String(phone).slice(0, 40) : null,
-    message: message ? String(message).slice(0, 4000) : null,
-    source: source ? String(source).slice(0, 80) : 'web',
+    id: ticketId(b.category),
+    name,
+    email,
+    phone,
+    category: clean(b.category, 40) || 'general',
+    service: clean(b.service, 120),
+    company: clean(b.company, 200),
+    needs: Array.isArray(b.needs) ? b.needs.map((n) => clean(n, 80)).slice(0, 20) : null,
+    message: clean(b.message, 4000),
+    source: clean(b.source, 80) || 'web',
     ip: req.ip,
-    // sin Date.now() en tiempo de ejecución del server real está bien; el server
-    // Node sí tiene reloj de sistema disponible en producción:
     ts: new Date().toISOString(),
   };
+
+  // 1) Persistir es la fuente de verdad: si esto falla, es un 500 real.
   try {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.appendFile(LEADS_FILE, JSON.stringify(lead) + '\n', 'utf8');
-    return res.status(201).json({ ok: true });
   } catch (err) {
     console.error('[lead] no se pudo persistir:', err);
     return res.status(500).json({ ok: false, error: 'error interno' });
   }
+
+  // 2) Avisar por correo es best-effort: si falla, el lead NO se pierde
+  //    (quedó en disco) y respondemos ok igual.
+  let notified = false;
+  try {
+    const to = await notify(lead);
+    notified = true;
+    console.log(`[lead] ${lead.id} guardado y notificado a ${to}`);
+  } catch (err) {
+    console.error(`[lead] ${lead.id} guardado pero el correo falló:`, err.message);
+  }
+
+  return res.status(201).json({ ok: true, id: lead.id, notified });
 });
 
 // --- Estáticos + fallback SPA ------------------------------------------------
-// Assets con hash de Vite -> cache larga inmutable; index.html -> sin cache.
 app.use(
   express.static(DIST, {
     index: false,
@@ -71,7 +152,6 @@ app.use(
   })
 );
 
-// Cualquier ruta no-API y no-archivo devuelve el index (SPA de una sola página).
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
   res.sendFile(path.join(DIST, 'index.html'));

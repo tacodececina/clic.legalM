@@ -12,6 +12,12 @@ services:
       - NODE_ENV=production
       - PORT=3012
       - DATA_DIR=/app/data
+      - SMTP_HOST=host.docker.internal   # Postfix del host (entrega local a @clic.legal)
+      - SMTP_PORT=25
+      - LEAD_FROM=noreply@clic.legal
+      - LEAD_FALLBACK=hola@clic.legal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # permite alcanzar el :25 del host
     volumes:
       - /opt/clic-legal-web/data:/app/data:rw   # leads persistidos fuera del contenedor
     healthcheck:

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShieldCheck, Target, MessageSquare, CheckCircle, FileText, Trash2, Clock, MapPin } from 'lucide-react';
 import { ContactSubmission } from '../types';
+import { submitLead } from '../lib/leads';
 
 interface ContactSectionProps {
   preselectedService?: string;
@@ -17,6 +18,8 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedData, setSubmittedData] = useState<ContactSubmission | null>(null);
   const [pastSubmissions, setPastSubmissions] = useState<ContactSubmission[]>([]);
+  const [error, setError] = useState('');
+  const [hp, setHp] = useState(''); // honeypot
 
   // Load past submissions from localStorage on mount
   useEffect(() => {
@@ -49,45 +52,60 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
     }
   }, [initialMessage]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !email) return;
 
+    setError('');
     setIsSubmitting(true);
 
-    // Simulate luxury API response with slight delay
-    setTimeout(() => {
-      const newSubmission: ContactSubmission = {
-        id: `CL-2026-${Math.floor(1000 + Math.random() * 9000)}`,
-        fullName,
-        email,
-        serviceInterest,
-        message: message || 'Evaluación estratégica inicial de portafolio.',
-        timestamp: new Date().toLocaleString('es-ES', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        }),
-        status: 'pending'
-      };
+    const result = await submitLead({
+      name: fullName,
+      email,
+      category: 'general',
+      service: serviceInterest,
+      message: message || 'Evaluación estratégica inicial de portafolio.',
+      source: 'contacto-home',
+      company_website: hp,
+    });
 
-      const updated = [newSubmission, ...pastSubmissions];
-      setPastSubmissions(updated);
-      localStorage.setItem('clic_legal_submissions', JSON.stringify(updated));
+    setIsSubmitting(false);
+    if (!result.ok) {
+      setError(result.error || 'No se pudo enviar tu solicitud. Intenta de nuevo.');
+      return;
+    }
 
-      setSubmittedData(newSubmission);
-      setIsSubmitting(false);
+    const newSubmission: ContactSubmission = {
+      id: result.id || `CL-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+      fullName,
+      email,
+      serviceInterest,
+      message: message || 'Evaluación estratégica inicial de portafolio.',
+      timestamp: new Date().toLocaleString('es-ES', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      status: 'pending'
+    };
 
-      // Reset fields
-      setFullName('');
-      setEmail('');
-      setMessage('');
-      if (onClearPreselectedService) {
-        onClearPreselectedService();
-      }
-    }, 1200);
+    // Eco local para el panel "solicitudes previas" (comodidad de UX; la fuente
+    // de verdad es el servidor).
+    const updated = [newSubmission, ...pastSubmissions];
+    setPastSubmissions(updated);
+    localStorage.setItem('clic_legal_submissions', JSON.stringify(updated));
+
+    setSubmittedData(newSubmission);
+
+    // Reset fields
+    setFullName('');
+    setEmail('');
+    setMessage('');
+    if (onClearPreselectedService) {
+      onClearPreselectedService();
+    }
   };
 
   const handleDeleteSubmission = (id: string) => {
@@ -223,6 +241,16 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Honeypot anti-bots: oculto para humanos. */}
+                  <input
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={hp}
+                    onChange={(e) => setHp(e.target.value)}
+                    className="hidden"
+                    aria-hidden="true"
+                  />
                   {/* Name field */}
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-gold-muted">
@@ -287,6 +315,10 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
                       className="w-full bg-dark-bg/60 border border-dark-border/60 hover:border-gold-brand/30 focus:border-gold-brand focus:outline-none text-sm text-white px-4 py-3.5 rounded-2xl transition-all placeholder:text-dark-text-muted/40 resize-none"
                     />
                   </div>
+
+                  {error && (
+                    <p className="text-xs text-red-400 text-center" role="alert">{error}</p>
+                  )}
 
                   {/* Submit Button */}
                   <button

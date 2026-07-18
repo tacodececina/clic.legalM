@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShieldAlert, CheckCircle, HelpCircle, PhoneCall, Mail, MapPin } from 'lucide-react';
 import { ContactSubmission } from '../types';
+import { submitLead } from '../lib/leads';
 
 export default function PageContactoIntegral() {
   const [name, setName] = useState('');
@@ -12,6 +13,8 @@ export default function PageContactoIntegral() {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState<ContactSubmission | null>(null);
+  const [error, setError] = useState('');
+  const [hp, setHp] = useState(''); // honeypot
 
   const toggleNeed = (need: string) => {
     if (needs.includes(need)) {
@@ -21,37 +24,59 @@ export default function PageContactoIntegral() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email) return;
 
+    setError('');
     setIsSubmitting(true);
-    setTimeout(() => {
-      const newSub: ContactSubmission = {
-        id: `CL-INT-${Math.floor(1000 + Math.random() * 9000)}`,
-        fullName: name,
-        email,
-        serviceInterest: 'Servicio Integral Multidisciplinario',
-        message: `[Servicio Integral] Empresa: ${company || 'N/A'} | Teléfono: ${phone || 'N/A'}\nÁreas de Interés: ${needs.join(', ') || 'Todas las áreas'}\nDetalles: ${message || 'Solicitud de diagnóstico integral.'}`,
-        timestamp: new Date().toLocaleString('es-ES'),
-        status: 'pending'
-      };
 
-      // Save to local storage
-      const saved = localStorage.getItem('clic_legal_submissions');
-      const list = saved ? JSON.parse(saved) : [];
-      list.unshift(newSub);
-      localStorage.setItem('clic_legal_submissions', JSON.stringify(list));
+    // El campo acepta correo O teléfono: lo separamos por la presencia de "@".
+    const contact = email.trim();
+    const isMail = contact.includes('@');
 
-      setSubmitted(newSub);
-      setIsSubmitting(false);
-      setName('');
-      setEmail('');
-      setPhone('');
-      setCompany('');
-      setNeeds([]);
-      setMessage('');
-    }, 1200);
+    const result = await submitLead({
+      name,
+      email: isMail ? contact : undefined,
+      phone: isMail ? (phone || undefined) : contact,
+      category: 'integral',
+      service: 'Servicio Integral Multidisciplinario',
+      company: company || undefined,
+      needs,
+      message: message || 'Solicitud de diagnóstico integral.',
+      source: 'contacto-integral',
+      company_website: hp,
+    });
+
+    setIsSubmitting(false);
+    if (!result.ok) {
+      setError(result.error || 'No se pudo enviar tu solicitud. Intenta de nuevo.');
+      return;
+    }
+
+    const newSub: ContactSubmission = {
+      id: result.id || `CL-INT-${Math.floor(1000 + Math.random() * 9000)}`,
+      fullName: name,
+      email,
+      serviceInterest: 'Servicio Integral Multidisciplinario',
+      message: `[Servicio Integral] Empresa: ${company || 'N/A'} | Teléfono: ${phone || 'N/A'}\nÁreas de Interés: ${needs.join(', ') || 'Todas las áreas'}\nDetalles: ${message || 'Solicitud de diagnóstico integral.'}`,
+      timestamp: new Date().toLocaleString('es-ES'),
+      status: 'pending'
+    };
+
+    // Eco local (la fuente de verdad es el servidor).
+    const saved = localStorage.getItem('clic_legal_submissions');
+    const list = saved ? JSON.parse(saved) : [];
+    list.unshift(newSub);
+    localStorage.setItem('clic_legal_submissions', JSON.stringify(list));
+
+    setSubmitted(newSub);
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCompany('');
+    setNeeds([]);
+    setMessage('');
   };
 
   return (
@@ -102,6 +127,16 @@ export default function PageContactoIntegral() {
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-5">
+                      {/* Honeypot anti-bots: oculto para humanos. */}
+                      <input
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={hp}
+                        onChange={(e) => setHp(e.target.value)}
+                        className="hidden"
+                        aria-hidden="true"
+                      />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="space-y-1.5">
                           <label className="block text-xs font-sans font-bold text-dark-text-muted mb-2 tracking-wider">
@@ -144,6 +179,10 @@ export default function PageContactoIntegral() {
                           className="w-full bg-dark-bg/50 border border-dark-border/40 focus:border-gold-brand focus:outline-none text-sm text-white px-4 py-3 rounded-2xl resize-none"
                         />
                       </div>
+
+                    {error && (
+                      <p className="text-xs text-red-400 text-center" role="alert">{error}</p>
+                    )}
 
                     <button
                       type="submit"
