@@ -32,11 +32,22 @@ const MAILBOXES = {
   integral: LEAD_FALLBACK,
 };
 
+// El correo de clic.legal se sirve por SMTP autenticado (submission 587/STARTTLS)
+// en mail.clic.legal. Si se define SMTP_USER, usamos auth; si no, caemos al
+// modo :25 sin auth (útil sólo si el MTA acepta entrega local anónima).
+const SMTP_PORT = Number(process.env.SMTP_PORT || 25);
+const SMTP_USER = process.env.SMTP_USER;
 const mailer = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'host.docker.internal',
-  port: Number(process.env.SMTP_PORT || 25),
-  secure: false,
-  ignoreTLS: true, // tráfico host-local en :25, sin STARTTLS
+  port: SMTP_PORT,
+  secure: SMTP_PORT === 465,               // SMTPS implícito en 465
+  requireTLS: SMTP_PORT === 587,           // STARTTLS obligatorio en submission
+  ignoreTLS: !SMTP_USER && SMTP_PORT === 25,
+  auth: SMTP_USER ? { user: SMTP_USER, pass: process.env.SMTP_PASS } : undefined,
+  // Verificamos TLS por defecto. Conéctate por el hostname del cert del MTA
+  // (SMTP_HOST=mail.ocdmex.com) para que valide. SMTP_INSECURE_TLS=true sólo
+  // como escape en dev; no usar en producción.
+  tls: { rejectUnauthorized: process.env.SMTP_INSECURE_TLS !== 'true' },
   // Si el MTA no responde, no colgamos la petición del lead (ya está en disco).
   connectionTimeout: 5000,
   greetingTimeout: 5000,
