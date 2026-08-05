@@ -1,13 +1,107 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clic Legal | Asesoría de Precisión</title>
+
+    <title>Clic Legal | Asesoría legal, contable y psicológica de precisión</title>
+    <meta
+      name="description"
+      content="Despacho multidisciplinario en México: asesoría legal, contable y psicológica de alta precisión. Derecho familiar, civil, mercantil, laboral, fiscal y amparo."
+    />
+    <meta name="theme-color" content="#0E0E0E" />
+    <link rel="canonical" href="https://clic.legal/" />
+
+    <!-- Favicon / iconos -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Clic Legal" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:url" content="https://clic.legal/" />
+    <meta
+      property="og:title"
+      content="Clic Legal | Asesoría legal, contable y psicológica de precisión"
+    />
+    <meta
+      property="og:description"
+      content="Despacho multidisciplinario en México: asesoría legal, contable y psicológica de alta precisión. Derecho familiar, civil, mercantil, laboral, fiscal y amparo."
+    />
+    <meta property="og:image" content="https://clic.legal/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Clic Legal" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Clic Legal | Asesoría legal, contable y psicológica de precisión"
+    />
+    <meta
+      name="twitter:description"
+      content="Despacho multidisciplinario en México: asesoría legal, contable y psicológica de alta precisión. Derecho familiar, civil, mercantil, laboral, fiscal y amparo."
+    />
+    <meta name="twitter:image" content="https://clic.legal/og-image.jpg" />
+
+    <!-- Datos estructurados (schema.org) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "LegalService",
+            "@id": "https://clic.legal/#organization",
+            "name": "Clic Legal",
+            "url": "https://clic.legal/",
+            "email": "hola@clic.legal",
+            "image": "https://clic.legal/logoreal.jpeg",
+            "logo": "https://clic.legal/logoreal.jpeg",
+            "description": "Despacho multidisciplinario de asesoría legal, contable y psicológica.",
+            "areaServed": {
+              "@type": "Country",
+              "name": "México"
+            },
+            "knowsAbout": [
+              "Derecho Familiar",
+              "Derecho Civil",
+              "Derecho Mercantil",
+              "Derecho Laboral",
+              "Derecho Fiscal",
+              "Derecho Administrativo",
+              "Derecho Penal",
+              "Amparo"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://clic.legal/#website",
+            "url": "https://clic.legal/",
+            "name": "Clic Legal",
+            "inLanguage": "es-MX",
+            "publisher": { "@id": "https://clic.legal/#organization" }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Google Analytics 4 -->
+    <!-- TODO: reemplazar G-XXXXXXXXXX (2 ocurrencias abajo) por el ID real de GA4. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
