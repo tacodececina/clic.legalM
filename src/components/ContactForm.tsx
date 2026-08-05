@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Send } from 'lucide-react';
 import { submitLead } from '../lib/leads';
+import PrivacyConsent from './PrivacyConsent';
 
 interface ContactFormProps {
   category: 'legal' | 'contable' | 'psicologia' | 'prensa';
@@ -19,12 +20,22 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
   const [ticketId, setTicketId] = useState('');
   const [error, setError] = useState('');
   const [hp, setHp] = useState(''); // honeypot
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
+  const [privacyInvalid, setPrivacyInvalid] = useState(false);
 
   const targetEmail = category === 'psicologia' ? 'psicologia@clic.legal' : (category === 'prensa' ? 'hola@clic.legal' : 'juridico@clic.legal');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email) return;
+
+    // Red de seguridad: el botón ya está deshabilitado sin consentimiento, pero
+    // el envío también puede dispararse por teclado o herramientas externas.
+    if (!acceptedPrivacy) {
+      setPrivacyInvalid(true);
+      setError('Debes aceptar el Aviso de Privacidad para enviar tu solicitud.');
+      return;
+    }
 
     setError('');
     setIsSubmitting(true);
@@ -149,11 +160,24 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
                 </div>
               </div>
 
+              <PrivacyConsent
+                id={`privacidad-${category}`}
+                checked={acceptedPrivacy}
+                invalid={privacyInvalid}
+                onChange={(accepted) => {
+                  setAcceptedPrivacy(accepted);
+                  if (accepted) {
+                    setPrivacyInvalid(false);
+                    setError('');
+                  }
+                }}
+              />
+
               {error && (
                 <p className="text-xs text-red-400 text-center" role="alert">{error}</p>
               )}
 
-              <button type="submit" disabled={isSubmitting} className="w-full bg-gold-brand hover:bg-gold-light disabled:bg-gold-muted text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
+              <button type="submit" disabled={isSubmitting || !acceptedPrivacy} className="w-full bg-gold-brand hover:bg-gold-light disabled:bg-gold-muted disabled:cursor-not-allowed disabled:opacity-70 text-dark-bg font-sans font-bold text-xs uppercase tracking-widest px-8 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer">
                 {isSubmitting ? (
                   <>
                     <div className="w-4 h-4 border-2 border-dark-bg border-t-transparent rounded-full animate-spin" />
@@ -188,7 +212,7 @@ export default function ContactForm({ category, title, subtitle }: ContactFormPr
               </p>
             </div>
 
-            <button onClick={() => { setSubmitted(false); setName(''); setEmail(''); setDesc(''); setService(''); }} className="bg-transparent border border-gold-brand/40 hover:border-gold-brand text-gold-light hover:text-white font-sans font-bold text-[10px] uppercase tracking-widest px-6 py-2 rounded-2xl transition-all cursor-pointer">
+            <button onClick={() => { setSubmitted(false); setName(''); setEmail(''); setDesc(''); setService(''); setAcceptedPrivacy(false); setPrivacyInvalid(false); }} className="bg-transparent border border-gold-brand/40 hover:border-gold-brand text-gold-light hover:text-white font-sans font-bold text-[10px] uppercase tracking-widest px-6 py-2 rounded-2xl transition-all cursor-pointer">
               Enviar otro mensaje
             </button>
           </motion.div>

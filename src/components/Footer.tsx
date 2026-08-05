@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Share2, Globe, Mail, Phone, MapPin, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Logo from './Logo';
+import WhatsAppIcon from './WhatsAppIcon';
+import { WHATSAPP_HREF, WHATSAPP_DISPLAY } from '../lib/whatsapp';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
@@ -41,9 +43,20 @@ export default function Footer({ onNavigate, onSelectService }: FooterProps) {
               <Mail size={16} />
               <span className="font-mono text-xs">hola@clic.legal</span>
             </a>
-            <a href="https://cliclegal.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-gold-light transition-colors w-fit" title="Sitio oficial">
+            <a href="https://clic.legal" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-gold-light transition-colors w-fit" title="Sitio oficial">
               <Globe size={16} />
-              <span className="font-mono text-xs">www.cliclegal.com</span>
+              <span className="font-mono text-xs">www.clic.legal</span>
+            </a>
+            <a
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-gold-light transition-colors w-fit"
+              title="Escríbenos por WhatsApp"
+              aria-label="Escríbenos por WhatsApp"
+            >
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
+              <span className="font-mono text-xs">{WHATSAPP_DISPLAY}</span>
             </a>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ShieldCheck, Target, MessageSquare, CheckCircle, FileText, Trash2, Clock, MapPin } from 'lucide-react';
 import { ContactSubmission } from '../types';
 import { submitLead } from '../lib/leads';
+import PrivacyConsent from './PrivacyConsent';
 
 interface ContactSectionProps {
   preselectedService?: string;
@@ -20,6 +21,8 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
   const [pastSubmissions, setPastSubmissions] = useState<ContactSubmission[]>([]);
   const [error, setError] = useState('');
   const [hp, setHp] = useState(''); // honeypot
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
+  const [privacyInvalid, setPrivacyInvalid] = useState(false);
 
   // Load past submissions from localStorage on mount
   useEffect(() => {
@@ -55,6 +58,14 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !email) return;
+
+    // Red de seguridad: el botón ya está deshabilitado sin consentimiento, pero
+    // el envío también puede dispararse por teclado o herramientas externas.
+    if (!acceptedPrivacy) {
+      setPrivacyInvalid(true);
+      setError('Debes aceptar el Aviso de Privacidad para enviar tu solicitud.');
+      return;
+    }
 
     setError('');
     setIsSubmitting(true);
@@ -103,6 +114,8 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
     setFullName('');
     setEmail('');
     setMessage('');
+    setAcceptedPrivacy(false);
+    setPrivacyInvalid(false);
     if (onClearPreselectedService) {
       onClearPreselectedService();
     }
@@ -316,6 +329,19 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
                     />
                   </div>
 
+                  <PrivacyConsent
+                    id="privacidad-home"
+                    checked={acceptedPrivacy}
+                    invalid={privacyInvalid}
+                    onChange={(accepted) => {
+                      setAcceptedPrivacy(accepted);
+                      if (accepted) {
+                        setPrivacyInvalid(false);
+                        setError('');
+                      }
+                    }}
+                  />
+
                   {error && (
                     <p className="text-xs text-red-400 text-center" role="alert">{error}</p>
                   )}
@@ -323,8 +349,8 @@ export default function ContactSection({ preselectedService, onClearPreselectedS
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-gold-brand hover:bg-gold-light disabled:bg-gold-muted text-dark-bg font-sans font-bold text-xs uppercase tracking-widest py-4 rounded-2xl transition-all duration-300 shadow-md shadow-gold-brand/10 hover:shadow-gold-brand/20 cursor-pointer flex items-center justify-center gap-2"
+                    disabled={isSubmitting || !acceptedPrivacy}
+                    className="w-full bg-gold-brand hover:bg-gold-light disabled:bg-gold-muted disabled:cursor-not-allowed disabled:opacity-70 text-dark-bg font-sans font-bold text-xs uppercase tracking-widest py-4 rounded-2xl transition-all duration-300 shadow-md shadow-gold-brand/10 hover:shadow-gold-brand/20 cursor-pointer flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>

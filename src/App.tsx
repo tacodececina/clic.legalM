@@ -20,10 +20,24 @@ import PagePrivacidad from './components/PagePrivacidad';
 import PageTerminos from './components/PageTerminos';
 import PageCookies from './components/PageCookies';
 
+import WhatsAppButton from './components/WhatsAppButton';
+
 import { ArrowUp, Video } from 'lucide-react';
 
+// Secciones que pueden abrirse por URL directa (el servidor sirve index.html
+// para cualquier ruta). La navegación interna sigue siendo por estado.
+const DEEP_LINK_SECTIONS = [
+  'inicio', 'legal', 'contable', 'psicologia', 'prensa',
+  'nosotros', 'contacto', 'privacidad', 'terminos', 'cookies',
+];
+
+const sectionFromUrl = () => {
+  const slug = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  return DEEP_LINK_SECTIONS.includes(slug) ? slug : 'inicio';
+};
+
 export default function App() {
-  const [activeSection, setActiveSection] = useState('inicio');
+  const [activeSection, setActiveSection] = useState(sectionFromUrl);
   const [showScrollTop, setShowScrollTop] = useState(false);
   // Pasarela estimador → formulario de contacto de la home
   const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
@@ -147,6 +161,9 @@ export default function App() {
           }
         }}
       />
+
+      {/* WhatsApp Business floating button (desktop; en móvil vive en el Footer) */}
+      <WhatsAppButton />
 
       {/* Back to Top floating scroll button */}
       {showScrollTop && (
